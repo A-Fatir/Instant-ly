@@ -1,0 +1,64 @@
+/* style.css */
+
+/* Use Instagram-like styling with pink and orange accents */
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #fafafa;
+  margin: 0;
+  padding: 0;
+  color: #262626;
+}
+
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+h1 {
+  color: #e1306c; /* Instagram pink */
+}
+
+input[type="file"],
+input[type="radio"],
+button {
+  margin-top: 10px;
+}
+
+.input-group {
+  margin-bottom: 15px;
+}
+
+button {
+  background: linear-gradient(45deg, #fd1d1d, #fcb045); /* red to orange gradient */
+  border: none;
+  color: white;
+  padding: 10px 15px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+.hidden {
+  display: none;
+}
+
+#result {
+  margin-top: 30px;
+  border-top: 1px solid #dbdbdb;
+  padding-top: 20px;
+}
+
+audio {
+  width: 100%;
+  margin: 10px 0;
+}
