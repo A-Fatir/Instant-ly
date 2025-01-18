@@ -1,16 +1,17 @@
-// Backend Code (Node.js with Express)
-
 const express = require('express');
 const axios = require('axios');
+const path = require('path'); // Add this line to import the 'path' module
 const app = express();
 const port = 3000;
 
-app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 
-// Gemini API credentials
-const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=GEMINI_API_KEY";
-const GEMINI_API_KEY = "AIzaSyAiZXeOU33LOi9Ffdr6dvRnl20OENTat5I";
+// Placeholder for Gemini API credentials
+const GEMINI_API_URL = "https://api.example-gemini.com/generate";
+const GEMINI_API_KEY = "your_gemini_api_key";
+
+// Serve static files from the 'public' directory
+app.use(express.static(path.join(__dirname, 'public'))); // Serve static files
 
 // Process Photo Endpoint
 app.post('/process-photo', async (req, res) => {
