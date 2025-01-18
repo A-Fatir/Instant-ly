@@ -1,0 +1,22 @@
+# Node.js dependencies
+node_modules/
+client/node_modules/
+
+# Build output (for React client)
+client/build/
+
+# Environment variables files (if you add them later)
+.env
+
+# Uploaded files
+uploads/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS generated files
+.DS_Store
+Thumbs.db
