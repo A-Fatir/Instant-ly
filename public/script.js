@@ -10,11 +10,12 @@ document.addEventListener('DOMContentLoaded', function() {
   const regenerateSongBtn = document.getElementById('regenerateSong');
   const regenerateCaptionBtn = document.getElementById('regenerateCaption');
 
+  // Handle form submission: analyze the uploaded photo
   uploadForm.addEventListener('submit', async function(e) {
     e.preventDefault();
     const formData = new FormData(uploadForm);
     
-    // Hide previous result if any
+    // Hide previous results
     resultDiv.classList.add('hidden');
 
     try {
@@ -33,19 +34,17 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
-  // Regenerate Song Button
+  // Handle regenerate events
   regenerateSongBtn.addEventListener('click', async function() {
-    await regenerateContent({ type: 'song' });
+    await regenerateContent('song');
   });
 
-  // Regenerate Caption Button
   regenerateCaptionBtn.addEventListener('click', async function() {
-    await regenerateContent({ type: 'caption' });
+    await regenerateContent('caption');
   });
 
-  async function regenerateContent({ type }) {
-    // For demo purposes, we simply resubmit the form data with a query parameter for regeneration.
-    // In a real implementation, you might have separate endpoints or parameters.
+  async function regenerateContent(type) {
+    // Re-use the current form data and send a regeneration flag
     const formData = new FormData(uploadForm);
     formData.append('regenerate', type);
     try {
@@ -60,7 +59,6 @@ document.addEventListener('DOMContentLoaded', function() {
       if (type === 'song') {
         updateSong(data.recommendedSong);
         if (data.postType === 'post' && data.caption) {
-          // Also update caption if available, or leave caption as is if not regenerated.
           updateCaption(data.caption);
         }
       } else if (type === 'caption') {
@@ -73,30 +71,24 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   function displayResult(data) {
-    // Update Song Section
     updateSong(data.recommendedSong);
-    
-    // If mode is post, update caption section
     if (data.postType === 'post') {
       updateCaption(data.caption);
       captionSection.classList.remove('hidden');
     } else {
       captionSection.classList.add('hidden');
     }
-
-    // Show results
     resultDiv.classList.remove('hidden');
   }
 
   function updateSong(song) {
-    // Display title and artist
     songDetails.innerHTML = `<strong>${song.title}</strong> by ${song.artist}`;
-    // Set audio src to the chorus snippet URL
     audioPreview.src = song.chorusUrl;
+    audioPreview.load();
     audioPreview.play();
   }
 
   function updateCaption(text) {
-    captionText.innerText = text;
+    captionText.innerText = text || '';
   }
 });
