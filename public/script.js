@@ -19,10 +19,14 @@ document.addEventListener('DOMContentLoaded', function() {
     resultDiv.classList.add('hidden');
 
     try {
+      // For Vercel, if your API and frontend share the same domain, relative URL works:
       const response = await fetch('/analyze', {
         method: 'POST',
         body: formData
       });
+      // If using an absolute URL, e.g.:
+      // const response = await fetch('https://YOUR_VERCEL_URL/analyze', { method: 'POST', body: formData });
+
       if (!response.ok) {
         throw new Error('Failed to analyze image');
       }
@@ -44,7 +48,6 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   async function regenerateContent(type) {
-    // Re-use the current form data and send a regeneration flag
     const formData = new FormData(uploadForm);
     formData.append('regenerate', type);
     try {
