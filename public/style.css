@@ -1,64 +1,98 @@
-/* style.css */
+// script.js
 
-/* Use Instagram-like styling with pink and orange accents */
-body {
-  font-family: 'Arial', sans-serif;
-  background-color: #fafafa;
-  margin: 0;
-  padding: 0;
-  color: #262626;
-}
+document.addEventListener('DOMContentLoaded', function () {
+  const uploadForm = document.getElementById('uploadForm');
+  const resultDiv = document.getElementById('result');
+  const songDetails = document.getElementById('song-details');
+  const captionSection = document.getElementById('caption-section');
+  const captionText = document.getElementById('captionText');
+  const audioPreview = document.getElementById('audioPreview');
+  const regenerateSongBtn = document.getElementById('regenerateSong');
+  const regenerateCaptionBtn = document.getElementById('regenerateCaption');
 
-.container {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 20px;
-}
+  uploadForm.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const formData = new FormData(uploadForm);
+    // Hide previous result if any
+    resultDiv.classList.add('hidden');
 
-header {
-  text-align: center;
-  margin-bottom: 20px;
-}
+    try {
+      const response = await fetch('/analyze', {
+        method: 'POST',
+        body: formData,
+      });
+      if (!response.ok) {
+        throw new Error('Failed to analyze image');
+      }
+      const data = await response.json();
+      displayResult(data);
+    } catch (error) {
+      alert(error.message);
+      console.error(error);
+    }
+  });
 
-h1 {
-  color: #e1306c; /* Instagram pink */
-}
+  // Regenerate Song Button event
+  regenerateSongBtn.addEventListener('click', async function () {
+    await regenerateContent('song');
+  });
 
-.input-group {
-  margin-bottom: 15px;
-}
+  // Regenerate Caption Button event
+  regenerateCaptionBtn.addEventListener('click', async function () {
+    await regenerateContent('caption');
+  });
 
-input[type="file"],
-input[type="radio"],
-button {
-  margin-top: 10px;
-}
+  async function regenerateContent(type) {
+    // For demonstration, simply re-use the current form data with a flag for regeneration.
+    const formData = new FormData(uploadForm);
+    formData.append('regenerate', type);
+    try {
+      const response = await fetch('/analyze', {
+        method: 'POST',
+        body: formData,
+      });
+      if (!response.ok) {
+        throw new Error('Failed to regenerate ' + type);
+      }
+      const data = await response.json();
+      if (type === 'song') {
+        updateSong(data.recommendedSong);
+        // If a caption is also available (for post mode), update it too.
+        if (data.postType === 'post' && data.caption) {
+          updateCaption(data.caption);
+        }
+      } else if (type === 'caption') {
+        updateCaption(data.caption);
+      }
+    } catch (error) {
+      alert(error.message);
+      console.error(error);
+    }
+  }
 
-button {
-  background: linear-gradient(45deg, #fd1d1d, #fcb045); /* red to orange gradient */
-  border: none;
-  color: white;
-  padding: 10px 15px;
-  font-size: 16px;
-  cursor: pointer;
-  border-radius: 5px;
-}
+  function displayResult(data) {
+    updateSong(data.recommendedSong);
 
-button:hover {
-  opacity: 0.9;
-}
+    // Only show caption section if the user chose a post
+    if (data.postType === 'post') {
+      updateCaption(data.caption);
+      captionSection.classList.remove('hidden');
+    } else {
+      captionSection.classList.add('hidden');
+    }
 
-.hidden {
-  display: none;
-}
+    resultDiv.classList.remove('hidden');
+  }
 
-#result {
-  margin-top: 30px;
-  border-top: 1px solid #dbdbdb;
-  padding-top: 20px;
-}
+  function updateSong(song) {
+    // Display title and artist
+    songDetails.innerHTML = `<strong>${song.title}</strong> by ${song.artist}`;
+    // Set the source of the audio preview to the provided chorusUrl
+    audioPreview.src = song.chorusUrl;
+    audioPreview.play();
+  }
 
-audio {
-  width: 100%;
-  margin: 10px 0;
-}
+  function updateCaption(text) {
+    captionText.innerText = text;
+  }
+});
