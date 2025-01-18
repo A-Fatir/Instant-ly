@@ -19,14 +19,11 @@ document.addEventListener('DOMContentLoaded', function() {
     resultDiv.classList.add('hidden');
 
     try {
-      // For Vercel, if your API and frontend share the same domain, relative URL works:
+      // For Vercel, if your API and frontend share the same domain, a relative URL works.
       const response = await fetch('/analyze', {
         method: 'POST',
         body: formData
       });
-      // If using an absolute URL, e.g.:
-      // const response = await fetch('https://YOUR_VERCEL_URL/analyze', { method: 'POST', body: formData });
-
       if (!response.ok) {
         throw new Error('Failed to analyze image');
       }
