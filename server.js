@@ -166,9 +166,12 @@ app.post('/analyze', upload.single('photo'), async (req, res) => {
       postType
     });
   } catch (error) {
-    console.error("Error processing analyze request:", error.response ? error.response.data : error.message);
-    res.status(500).json({ error: "Failed to analyze image" });
-  }
+  console.error("Error processing analyze request:", error.response ? error.response.data : error.message);
+  res.status(500).json({
+    error: "Failed to analyze image",
+    details: error.response ? error.response.data : error.message
+  });
+}
 });
 
 // Start the server
