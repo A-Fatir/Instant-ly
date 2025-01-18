@@ -24,14 +24,14 @@ h1 {
   color: #e1306c; /* Instagram pink */
 }
 
+.input-group {
+  margin-bottom: 15px;
+}
+
 input[type="file"],
 input[type="radio"],
 button {
   margin-top: 10px;
-}
-
-.input-group {
-  margin-bottom: 15px;
 }
 
 button {
