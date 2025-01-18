@@ -10,16 +10,13 @@ document.addEventListener('DOMContentLoaded', function() {
   const regenerateSongBtn = document.getElementById('regenerateSong');
   const regenerateCaptionBtn = document.getElementById('regenerateCaption');
 
-  // Handle form submission: analyze the uploaded photo
+  // Handle form submission
   uploadForm.addEventListener('submit', async function(e) {
     e.preventDefault();
     const formData = new FormData(uploadForm);
-    
-    // Hide previous results
     resultDiv.classList.add('hidden');
 
     try {
-      // For Vercel, if your API and frontend share the same domain, a relative URL works.
       const response = await fetch('/analyze', {
         method: 'POST',
         body: formData
