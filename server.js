@@ -4,16 +4,21 @@ const bodyParser = require('body-parser');
 const axios = require('axios');
 const multer = require('multer');
 const path = require('path');
+const cors = require('cors');  // <-- Added for CORS support
 require('dotenv').config(); // Load environment variables from .env
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// Enable CORS for all routes (you can restrict this if needed)
+app.use(cors());
 
 // Spotify API configuration – ensure these values are in your .env file
 const SPOTIFY_CLIENT_ID = process.env.SPOTIFY_CLIENT_ID || 'YOUR_SPOTIFY_CLIENT_ID';
 const SPOTIFY_CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET || 'YOUR_SPOTIFY_CLIENT_SECRET';
 
 // Set up Multer for file uploads (accept one file per request)
+// Note: In Vercel’s serverless environment, file storage is ephemeral.
 const upload = multer({ dest: 'uploads/' });
 
 // Serve static files from the "public" folder
@@ -68,33 +73,33 @@ app.post('/analyze', upload.single('photo'), async (req, res) => {
   try {
     // Check if file was provided (simulate file analysis)
     if (!req.file) {
+      console.error("No file uploaded.");
       return res.status(400).json({ error: 'No photo uploaded.' });
     }
+    console.log("File uploaded:", req.file.originalname);
+    
     // Retrieve form data
     const { postType, regenerate } = req.body; // postType is either "post" or "story"
 
     // --------------
     // Step 1: Simulate Gemini API call
     // --------------
-    // Simulate analysis of the photo to produce a recommendation.
-    // In production, replace this with a real call to your Gemini API.
+    // (In production, replace this with a real call to your Gemini API)
     let recommendedSong, customSong, caption;
     
-    // For simulation, we "analyze" the file name (or use randomness)
     if (regenerate === 'song' || regenerate === 'caption' || Math.random() > 0.2) {
-      // Most of the time, we use this sample recommendation
+      // Default simulated recommendation
       recommendedSong = {
         title: "Shape of You",
         artist: "Ed Sheeran"
       };
-      // Randomly decide if we should generate a custom song (simulate custom audio generation)
+      // Randomly decide if we should generate a custom song
       customSong = Math.random() > 0.5;
-      // Provide a caption if the mode is post
       if (postType === 'post') {
         caption = "Embracing the rhythm of the moment.";
       }
     } else {
-      // Alternatively, simulate another song recommendation
+      // Alternative recommendation
       recommendedSong = {
         title: "Blinding Lights",
         artist: "The Weeknd"
@@ -110,23 +115,22 @@ app.post('/analyze', upload.single('photo'), async (req, res) => {
     // --------------
     let chorusUrl = null;
     if (customSong) {
-      // Simulate custom audio generation based on the vibe
-      // Replace the URL below with a call to your own custom audio generation service as needed.
+      // Simulate custom audio generation based on the vibe.
       chorusUrl = "https://www.sample-videos.com/audio/mp3/wave.mp3";
       console.log("Using custom generated audio snippet.");
     } else {
-      // Otherwise, use Spotify to get a preview snippet.
+      // Otherwise, try to get a preview snippet from Spotify.
       const accessToken = await getSpotifyToken();
       chorusUrl = await getSpotifyPreviewUrl(recommendedSong.title, recommendedSong.artist, accessToken);
       console.log("Using Spotify track preview.");
     }
-    // Use a fallback URL if none found
+    // Fallback URL if no preview is found
     if (!chorusUrl) {
       chorusUrl = "https://www.sample-videos.com/audio/mp3/crowd-cheering.mp3";
     }
     recommendedSong.chorusUrl = chorusUrl;
 
-    // Return the data to the client
+    // Return the response JSON to the client
     res.json({
       recommendedSong,
       caption,
