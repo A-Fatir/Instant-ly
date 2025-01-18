@@ -2,14 +2,15 @@
 node_modules/
 client/node_modules/
 
-# Build output (for React client)
+# Build output (if applicable)
 client/build/
 
-# Environment variables files (if you add them later)
+# Environment variables
 .env
 
-# Uploaded files
+# Uploaded files (optionally, if you want to store the folder structure, use .gitkeep)
 uploads/
+!uploads/.gitkeep
 
 # Logs
 *.log
@@ -20,5 +21,3 @@ yarn-error.log*
 # OS generated files
 .DS_Store
 Thumbs.db
-
-.env
