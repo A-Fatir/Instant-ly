@@ -7,8 +7,8 @@ const port = 3000;
 app.use(express.json());
 
 // Placeholder for Gemini API credentials
-const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=GEMINI_API_KEY";
-const GEMINI_API_KEY = "AIzaSyAiZXeOU33LOi9Ffdr6dvRnl20OENTat5I";
+const GEMINI_API_URL = "";
+const GEMINI_API_KEY = "";
 
 // Serve static files from the 'public' directory
 app.use(express.static(path.join(__dirname, 'public'))); // Serve static files
