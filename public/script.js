@@ -36,7 +36,6 @@ document.addEventListener('DOMContentLoaded', function() {
   regenerateSongBtn.addEventListener('click', async function() {
     await regenerateContent('song');
   });
-
   regenerateCaptionBtn.addEventListener('click', async function() {
     await regenerateContent('caption');
   });
