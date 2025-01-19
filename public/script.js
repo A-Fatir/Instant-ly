@@ -10,7 +10,6 @@ document.addEventListener('DOMContentLoaded', function() {
   const regenerateSongBtn = document.getElementById('regenerateSong');
   const regenerateCaptionBtn = document.getElementById('regenerateCaption');
 
-  // Handle form submission
   uploadForm.addEventListener('submit', async function(e) {
     e.preventDefault();
     const formData = new FormData(uploadForm);
@@ -32,10 +31,10 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
-  // Handle regenerate events
   regenerateSongBtn.addEventListener('click', async function() {
     await regenerateContent('song');
   });
+
   regenerateCaptionBtn.addEventListener('click', async function() {
     await regenerateContent('caption');
   });
